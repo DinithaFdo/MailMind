@@ -1,0 +1,393 @@
+"use client";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+export default function Summaries() {
+  const [summaries, setSummaries] = useState<any[]>([]);
+  const [selectedSummary, setSelectedSummary] = useState<any>(null);
+  const [updatedSummary, setUpdatedSummary] = useState("");
+  const [updatedName, setUpdatedName] = useState("");
+  const [updatedTags, setUpdatedTags] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deleteSummaryId, setDeleteSummaryId] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [openModifyModal, setOpenModifyModal] = useState(false);
+  const [deleting, setDeleting] = useState(false); // Track if deletion is in progress
+
+  // ✅ Fetch Summaries with loading state
+  useEffect(() => {
+    const fetchSummaries = async () => {
+      setLoading(true); // Show loader before fetching
+      try {
+        const response = await fetch("/api/summarizations");
+        const data = await response.json();
+        if (!response.ok)
+          throw new Error(data.error || "Failed to fetch summaries");
+        setSummaries(data.summaries);
+      } catch (error) {
+        console.error("Error fetching summaries:", error);
+        toast.error("Error fetching summaries");
+      } finally {
+        setLoading(false); // Hide loader after fetching
+      }
+    };
+    fetchSummaries();
+  }, []);
+
+  // ✅ Handle Delete Summary
+  const handleDelete = async (id: string) => {
+    setDeleting(true); // Start deletion loading state
+    try {
+      const response = await fetch(`/api/summarizations/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete summary");
+
+      toast.success("Summary deleted successfully!");
+      setSummaries(summaries.filter((summary) => summary._id !== id));
+      setOpenDeleteDialog(false);
+      setSelectedSummary(null);
+    } catch (error) {
+      console.error("Error deleting summary:", error);
+      toast.error("Error deleting summary");
+    } finally {
+      setDeleting(false); // End deletion loading state
+    }
+  };
+
+  // ✅ Handle Edit Summary
+  const handleEdit = (summary: any) => {
+    setSelectedSummary(summary);
+    setUpdatedSummary(summary.summary); // Prefill summary data
+    setUpdatedName(summary.name); // Prefill name data
+    setUpdatedTags(summary.tags || []); // Prefill tags data (ensure it's an array)
+    setOpenModifyModal(true); // Open the Modify modal when edit is clicked
+  };
+
+  // ✅ Handle Update Summary
+  const handleUpdate = async () => {
+    if (!updatedName || updatedName.length > 50) {
+      toast.error("Name is required and should be less than 50 characters.");
+      return;
+    }
+
+    if (!updatedSummary || updatedSummary.length < 10) {
+      toast.error("Summary must be at least 10 characters.");
+      return;
+    }
+
+    // Check if the name is unique
+    const nameExists = summaries.some(
+      (summary) =>
+        summary.name.toLowerCase() === updatedName.toLowerCase() &&
+        summary._id !== selectedSummary._id
+    );
+    if (nameExists) {
+      toast.error("Name must be unique.");
+      return;
+    }
+
+    // Check if the user is adding more than 5 tags
+    if (updatedTags.length > 5) {
+      toast.error("You can only add up to 5 tags.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `/api/summarizations/${selectedSummary._id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: updatedName,
+            summary: updatedSummary,
+            tags: updatedTags,
+          }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to update summary");
+
+      const updatedData = await response.json();
+      setSummaries(
+        summaries.map((summary) =>
+          summary._id === selectedSummary._id
+            ? updatedData.updatedSummary
+            : summary
+        )
+      );
+
+      toast.success("Summary updated successfully!");
+      setOpenModifyModal(false); // Close the Modify modal after update
+      setSelectedSummary(null); // Clear selected summary after update
+    } catch (error) {
+      console.error("Error updating summary:", error);
+      toast.error("Error updating summary");
+    }
+  };
+
+  // ✅ Handle Tag Input (Press space to add a tag)
+  const handleTagInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const newTags = value.split(" ").filter((tag) => tag.trim() !== "");
+
+    // Check if the user is trying to add more than 5 tags
+    if (newTags.length <= 5) {
+      setUpdatedTags(newTags);
+    } else {
+      toast.error("You can only add up to 5 tags.");
+    }
+  };
+
+  // ✅ Handle adding tags when space is pressed
+const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const inputField = e.target as HTMLInputElement;
+  const value = inputField.value.trim();
+
+  // If space or enter is pressed
+  if (e.key === " " || e.key === "Enter") {
+    if (value !== "") {
+      // Split the value by space and filter out empty tags
+      const newTags = value.split(" ").filter((tag) => tag.trim() !== "");
+
+      // Avoid adding duplicate tags
+      const uniqueTags = Array.from(new Set([...updatedTags, ...newTags]));
+
+      // Update tags state with unique tags
+      setUpdatedTags(uniqueTags);
+      
+
+      // Clear the input after adding the tag
+      inputField.value = "";
+    }
+  }
+};
+
+
+
+
+
+  // ✅ Filter Summaries by Search Term
+  const filteredSummaries = summaries.filter(
+    (summary) =>
+      summary.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      summary.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      summary.tags.some((tag: string) =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+  );
+
+  // Show loading message or loader when fetching data
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex">
+      {/* Left Sidebar: List of Summaries */}
+      <div className="w-1/3 p-6 overflow-y-auto h-screen bg-gray-50">
+        <h2 className="text-2xl font-bold mb-6 text-gray-700">Summaries</h2>
+
+        {/* Search Bar */}
+        <Input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by name, content, or tags"
+          className="w-full p-4 mb-6 border rounded-xl shadow-md focus:outline-none"
+        />
+
+        {filteredSummaries.length === 0 ? (
+          <p>No summaries found.</p>
+        ) : (
+          <ul className="space-y-6">
+            {filteredSummaries.map((summary) => (
+              <li
+                key={summary._id}
+                className="p-4 border rounded-lg shadow-md cursor-pointer hover:bg-gray-100 transition-all"
+                onClick={() => setSelectedSummary(summary)} // Update selected summary on click
+              >
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {summary.name}
+                </h3>
+                <p className="text-gray-600">
+                  {summary.summary.slice(0, 50)}...
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Right Sidebar: Selected Summary Details */}
+      <div className="flex-1 p-6 bg-white shadow-lg rounded-l-lg">
+        {selectedSummary ? (
+          <div className="flex flex-col items-start space-y-6">
+            <h2 className="text-3xl font-semibold text-gray-900">
+              {selectedSummary.name}
+            </h2>
+            <p className="text-sm text-gray-500">
+              {new Date(selectedSummary.createdAt).toLocaleString()}
+            </p>
+            <p className="mt-6 text-lg">{selectedSummary.summary}</p>
+            <div className="mt-6">
+              <p className="font-semibold text-gray-700">Tags:</p>
+              <div className="flex gap-3 flex-wrap">
+                {selectedSummary.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm font-medium"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-6">
+              <Button
+                onClick={() => handleEdit(selectedSummary)} // Open Modify modal when clicked
+                className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg shadow-md focus:outline-none"
+              >
+                Modify
+              </Button>
+              <AlertDialog
+                open={openDeleteDialog}
+                onOpenChange={setOpenDeleteDialog}
+              >
+                <AlertDialogTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      setDeleteSummaryId(selectedSummary._id);
+                      setOpenDeleteDialog(true);
+                    }}
+                    className="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-lg shadow-md focus:outline-none"
+                  >
+                    Delete
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="absolute right-10 top-1/3">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. Do you want to delete this
+                      summary?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel
+                      onClick={() => setOpenDeleteDialog(false)}
+                    >
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleDelete(deleteSummaryId)}
+                    >
+                      {deleting ? (
+                        <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-white"></div>
+                      ) : (
+                        "Delete"
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold text-gray-700">
+              Select a summary to view details
+            </h2>
+          </div>
+        )}
+      </div>
+
+      {/* Modify Summary Modal */}
+      <Dialog open={openModifyModal} onOpenChange={setOpenModifyModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Modify Summary</DialogTitle>
+            <DialogDescription>
+              Edit the details of your saved summary.
+            </DialogDescription>
+          </DialogHeader>
+          <div>
+            <Input
+              type="text"
+              value={updatedName}
+              onChange={(e) => setUpdatedName(e.target.value)}
+              placeholder="Summary Name"
+              className="mb-4"
+            />
+            <Textarea
+              value={updatedSummary}
+              onChange={(e) => setUpdatedSummary(e.target.value)}
+              placeholder="Summary Content"
+              className="mb-4"
+            />
+            <div className="mb-4">
+              <Input
+                type="text"
+                value={updatedTags.join(" ")} // Display the tags as a string
+                onChange={handleTagInput} // Update tags as user types
+                onKeyUp={handleKeyUp} // Update tags on space key
+                placeholder="Add tags (space separated)"
+                className="mb-4"
+              />
+              <div className="flex flex-wrap gap-2">
+                {updatedTags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm font-medium"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button onClick={handleUpdate} className="bg-blue-500 text-white">
+                Save Changes
+              </Button>
+              <Button
+                onClick={() => setOpenModifyModal(false)}
+                className="ml-2"
+              >
+                Cancel
+              </Button>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

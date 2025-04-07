@@ -1,4 +1,6 @@
-import { SignUpForm } from "@/components/ui/signup-form";
+"use client";
+
+import { SignUp } from "@clerk/nextjs";
 import logo from "@/public/MailMind Logo.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,7 +26,7 @@ export default function page() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <SignUpForm />
+            <SignUp path="/sign-up" signInUrl="/sign-in" />
           </div>
         </div>
       </div>
