@@ -1,76 +1,47 @@
 import { NextResponse } from "next/server";
-import {
-  getReminderById,
-  updateReminder,
-  deleteReminder,
-} from "@/server/models/Reminder";
+import connectDB from "@/lib/db";
+import Reminder from "@/server/models/Reminder";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const reminder = getReminderById(params.id);
-    if (!reminder) {
-      return NextResponse.json(
-        { message: "Reminder not found" },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json(reminder);
-  } catch (error) {
-    console.error("Error fetching reminder:", error);
-    return NextResponse.json(
-      { message: "Error fetching reminder" },
-      { status: 500 }
-    );
-  }
+export async function GET(_req: Request, { params }: { params: { id: string } }) {
+  await connectDB();
+  const reminder = await Reminder.findById(params.id);
+  if (!reminder) return NextResponse.json({ message: "Not found" }, { status: 404 });
+  return NextResponse.json(reminder);
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const body = await request.json();
-    const updatedReminder = updateReminder(params.id, body);
-    if (!updatedReminder) {
-      return NextResponse.json(
-        { message: "Reminder not found" },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json(updatedReminder);
-  } catch (error) {
-    console.error("Error updating reminder:", error);
-    return NextResponse.json(
-      { message: "Error updating reminder" },
-      { status: 400 }
-    );
-  }
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  await connectDB();
+  const body = await req.json();
+  const updated = await Reminder.findByIdAndUpdate(params.id, body, { new: true });
+  return updated
+    ? NextResponse.json(updated)
+    : NextResponse.json({ message: "Not found" }, { status: 404 });
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
+  req: Request,
+  context: { params: { id: string } }
 ) {
   try {
-    const success = deleteReminder(params.id);
-    if (!success) {
-      return NextResponse.json(
-        { message: "Reminder not found" },
-        { status: 404 }
-      );
+    const { id } = context.params;
+
+     // ✅ Print the incoming ID to the server console
+     console.log("🧨 Deleting reminder:", id);
+
+    if (!id) {
+      return NextResponse.json({ message: "Missing ID" }, { status: 400 });
     }
-    return NextResponse.json(
-      { message: "Reminder deleted successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error deleting reminder:", error);
-    return NextResponse.json(
-      { message: "Error deleting reminder" },
-      { status: 500 }
-    );
+
+    await connectDB();
+    const deleted = await Reminder.findByIdAndDelete(id);
+
+    return deleted
+      ? NextResponse.json({ message: "Deleted successfully" })
+      : NextResponse.json({ message: "Reminder not found" }, { status: 404 });
+  } catch (err) {
+    console.error("Delete failed:", err);
+    return NextResponse.json({ message: "Error deleting reminder" }, { status: 500 });
   }
 }
+
+
