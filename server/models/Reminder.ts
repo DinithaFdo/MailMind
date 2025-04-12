@@ -16,6 +16,10 @@ const ReminderSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    clerkUserId: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
