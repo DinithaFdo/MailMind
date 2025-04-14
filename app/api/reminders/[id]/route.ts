@@ -2,21 +2,24 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Reminder from "@/server/models/Reminder";
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
-  await connectDB();
-  const reminder = await Reminder.findById(params.id);
-  if (!reminder) return NextResponse.json({ message: "Not found" }, { status: 404 });
-  return NextResponse.json(reminder);
+// ✅ Use context.params properly
+export async function PUT(req: Request, context: { params: { id: string } }) {
+  try {
+    await connectDB();
+    const body = await req.json();
+    const id = context.params.id; // 👈 fix here
+
+    const updated = await Reminder.findByIdAndUpdate(id, body, { new: true });
+
+    return updated
+      ? NextResponse.json(updated)
+      : NextResponse.json({ message: "Not found" }, { status: 404 });
+  } catch (err) {
+    console.error("❌ Update failed:", err);
+    return NextResponse.json({ message: "Update error" }, { status: 500 });
+  }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  await connectDB();
-  const body = await req.json();
-  const updated = await Reminder.findByIdAndUpdate(params.id, body, { new: true });
-  return updated
-    ? NextResponse.json(updated)
-    : NextResponse.json({ message: "Not found" }, { status: 404 });
-}
 
 export async function DELETE(
   req: Request,
