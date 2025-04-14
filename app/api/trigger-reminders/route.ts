@@ -39,18 +39,22 @@ export async function GET() {
         userDetails?.allowWhatsappAlerts &&
         userDetails?.whatsappNumber?.trim()
       ) {
-        const result = await sendWhatsappReminder({
-          phoneNumber: userDetails.whatsappNumber.replace("+", ""),
-          templateName: "reminder_alert",
-          variables: [
-            reminder.title,
-            reminder.description,
-            `${reminder.date} ${reminder.time}`
-          ]
-        });
+        // ✅ Delay WhatsApp message by 50 seconds
+        setTimeout(async () => {
+          const result = await sendWhatsappReminder({
+            phoneNumber: userDetails.whatsappNumber.replace("+", ""),
+            templateName: "reminder_alert",
+            variables: [
+              reminder.title,
+              reminder.description,
+              `${reminder.date} ${reminder.time}`
+            ]
+          });
 
-        console.log("📨 WhatsApp Send Result:", result);
+          console.log("📨 WhatsApp Send Result:", result);
+        }, 50000); // 50,000ms = 50 seconds
       }
+
 
       reminder.isCompleted = true;
       await reminder.save();
