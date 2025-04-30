@@ -77,7 +77,7 @@ export default function Footer() {
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
-                        1on1 Coaching{" "}
+                        AI Summarization
                       </Link>
                     </li>
 
@@ -86,7 +86,7 @@ export default function Footer() {
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
-                        Company Review{" "}
+                        Integrate with MailMind{" "}
                       </Link>
                     </li>
 
@@ -95,7 +95,7 @@ export default function Footer() {
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
-                        Accounts Review{" "}
+                        AI Email Assistant{" "}
                       </Link>
                     </li>
 
@@ -104,7 +104,7 @@ export default function Footer() {
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
-                        HR Consulting{" "}
+                        AI Email Generator{" "}
                       </Link>
                     </li>
 
@@ -113,7 +113,7 @@ export default function Footer() {
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
-                        SEO Optimisation{" "}
+                        AI Email Classifier{" "}
                       </a>
                     </li>
                   </ul>
