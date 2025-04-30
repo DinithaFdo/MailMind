@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const Reminder = () => {
   const [reminders, setReminders] = useState([]);
-  const [newReminder, setNewReminder] = useState('');
+  const [newReminder, setNewReminder] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (newReminder.trim() !== '') {
+    if (newReminder.trim() !== "") {
       setReminders([...reminders, newReminder]);
-      setNewReminder('');
+      setNewReminder("");
     }
   };
 
   return (
     <div>
-      <h1>Reminder List</h1>
+      <h1>ALL Reminder List</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
