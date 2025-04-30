@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📬 MailMind
 
-## Getting Started
+**MailMind** is an AI-powered email management platform that boosts productivity by helping users categorize, summarize, and organize their emails efficiently. Built with modern technologies, MailMind offers intelligent automation features to streamline your inbox workflow.
 
-First, run the development server:
+![GitHub Repo Stars](https://img.shields.io/github/stars/DinithaFdo/mailmind?style=social)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/DinithaFdo/mailmind)
+![License](https://img.shields.io/github/license/DinithaFdo/mailmind)
+
+---
+
+## 🚀 Features
+
+- 🔍 **Automatic Email Categorization** – Organizes emails based on content & context.
+- ⚡ **Urgent Email Highlighting** – Instantly draws attention to critical messages.
+- 🧠 **AI-Powered Summarization** – Summarize long emails for faster reading.
+- 🗂️ **Summarization History**
+  - Save email summaries with a custom title and tags.
+  - Edit, update, or delete past summaries.
+  - Reuse summaries directly in the email compose window.
+- 🔔 **Reminders** – Get notified about follow-ups and unreplied emails.
+- 💬 **Email Composition with Saved Summaries** – Insert summaries using shortcuts.
+- 🔐 **Authentication with Clerk** – Secure, passwordless login/signup.
+- 🧾 **Stripe Integration (Coming Soon)** – For monetization and premium features.
+
+---
+
+## 🧰 Tech Stack
+
+**Frontend:**
+
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [ShadCN UI](https://ui.shadcn.com/)
+
+**Backend & Integrations:**
+
+- [MongoDB](https://www.mongodb.com/) – Cloud NoSQL database
+- [Clerk](https://clerk.dev/) – Authentication system
+- [Aurinco](https://aurincotech.com/) – Email fetching & sending
+- [Orama](https://oramasearch.com/) – Fast email search engine
+- [Stripe](https://stripe.com/) – (Optional) Subscription-based billing
+
+---
+
+## 🧑‍💻 Team & Roles
+
+| Team Member                  | GitHub Username                  | Feature                           | Branch Name                         |
+|-----------------------------|----------------------------------|-----------------------------------|-------------------------------------|
+| Gagana Ushan                | [@GaganaUshan](https://github.com/GaganaUshan)           | Email Categories Management       | `feature/email-categories`          |
+| Ishara Gunarathne           | [@ish-2000](https://github.com/ish-2000)                 | Email Reminder System             | `feature/email-reminders`           |
+| Dinitha Fernando            | [@DinithaFdo](https://github.com/DinithaFdo)             | Email Summarization History       | `feature/email-summarization`       |
+| Aweesha Thavishanka         | [@aweeshathavishanka](https://github.com/aweeshathavishanka) | AI Features                        | `feature/ai-tools`                  |
+
+
+---
+
+## 📦 Installation & Local Setup
+
+Follow these steps to get MailMind running locally:
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/mailmind.git
+cd mailmind
+```
+
+### 2. Clone the Repository
+
+```bash
+npm install
+
+or
+
+yarn install
+```
+
+### 3. 🔐 Add Environment Variables
+
+```bash
+CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+MONGODB_URI=your_mongodb_connection_string
+AURINCO_API_KEY=your_aurinco_api_key
+ORAMA_API_KEY=your_orama_api_key
+STRIPE_SECRET_KEY=your_stripe_secret_key (optional)
+```
+
+⚠️ Make sure not to commit this file to GitHub.
+
+
+### 4. 🧪 Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Once the server starts, open your browser and go to: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 5. ✅ Build for Production (Optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+If you want to deploy or test the production build locally:
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 6. 🧼 Useful Commands
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command         | Description                                 |
+|-----------------|---------------------------------------------|
+| `npm run dev`   | Start the development server                |
+| `npm run build` | Build the app for production                |
+| `npm start`     | Start the production server                 |
+| `npm run lint`  | Run linter to find code issues              |
+| `npm run format`| Format code using Prettier (if configured)  |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
