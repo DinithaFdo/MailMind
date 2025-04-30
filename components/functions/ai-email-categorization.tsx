@@ -13,6 +13,12 @@ export default function AIEmailCategorization() {
           easier for you to find important messages and keep your inbox
           organized.
         </p>
+        <p>
+          With AI Email Categorization, you can say goodbye to the hassle of
+          manually sorting through your emails. The tool learns from your
+          behavior and preferences, ensuring that it categorizes your emails in
+          a way that makes sense for you.
+        </p>
       </div>
     </div>
   );
