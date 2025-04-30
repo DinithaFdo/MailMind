@@ -14,7 +14,7 @@ const Reminder = () => {
 
   return (
     <div>
-      
+      <h1>Reminder List</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -22,18 +22,13 @@ const Reminder = () => {
           onChange={(e) => setNewReminder(e.target.value)}
           placeholder="Add a new reminder"
         />
-        <input
-  type="text"
-  value={newReminder}
-  onChange={(e) => setNewReminder(e.target.value)}
-  placeholder="Add new reminder"
-/>
-<div className="reminder-container">
-
-
         <button type="submit">Add</button>
       </form>
-      
+      <ul>
+        {reminders.map((reminder, index) => (
+          <li key={index}>{reminder}</li>
+        ))}
+      </ul>
     </div>
   );
 };
