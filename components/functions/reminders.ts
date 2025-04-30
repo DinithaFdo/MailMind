@@ -22,6 +22,13 @@ const Reminder = () => {
           onChange={(e) => setNewReminder(e.target.value)}
           placeholder="Add a new reminder"
         />
+        <input
+  type="text"
+  value={newReminder}
+  onChange={(e) => setNewReminder(e.target.value)}
+  placeholder="Add new reminder"
+/>
+
         <button type="submit">Add</button>
       </form>
       
