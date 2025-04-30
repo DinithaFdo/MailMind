@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 
 const Reminder = () => {
-  const [reminders, setReminders] = useState([]);
-  const [newReminder, setNewReminder] = useState("");
+  const [reminders, setReminders] = useState<string[]>([]);
+  const [newReminder, setNewReminder] = useState<string>("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newReminder.trim() !== "") {
       setReminders([...reminders, newReminder]);
       setNewReminder("");
     }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewReminder(e.target.value);
   };
 
   return (
@@ -19,16 +23,11 @@ const Reminder = () => {
         <input
           type="text"
           value={newReminder}
-          onChange={(e) => setNewReminder(e.target.value)}
+          onChange={handleChange}
           placeholder="Add a new reminder"
         />
         <button type="submit">Add</button>
       </form>
-      <ul>
-        {reminders.map((reminder, index) => (
-          <li key={index}>{reminder}</li>
-        ))}
-      </ul>
     </div>
   );
 };
