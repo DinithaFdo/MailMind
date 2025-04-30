@@ -20,27 +20,28 @@ export default function NavBar() {
             <div className="flex items-center gap-10">
               <Button
                 variant={"link"}
-                className="font-semibold hover:text-indigo-500"
-              >
+                className="font-semibold hover:text-indigo-500">
                 <Link href={"/"}>About</Link>
               </Button>
               <Button
                 variant={"link"}
-                className="font-semibold hover:text-indigo-500"
-              >
+                className="font-semibold hover:text-indigo-500">
                 <Link href={"/"}>Pricing</Link>
               </Button>
               <Button
                 variant={"link"}
-                className="font-semibold hover:text-indigo-500"
-              >
+                className="font-semibold hover:text-indigo-500">
                 <Link href={"/"}>Blog</Link>
               </Button>
               <Button
                 variant={"link"}
-                className="font-semibold hover:text-indigo-500"
-              >
+                className="font-semibold hover:text-indigo-500">
                 <Link href={"/"}>Features</Link>
+              </Button>
+              <Button
+                variant={"link"}
+                className="font-semibold hover:text-indigo-500">
+                <Link href={"/"}>Support Contact</Link>
               </Button>
             </div>
             <div className="flex items-center gap-2">
