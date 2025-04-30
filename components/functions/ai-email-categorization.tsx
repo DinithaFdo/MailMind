@@ -26,6 +26,16 @@ export default function AIEmailCategorization() {
           process, you can focus on what really matters – responding to
           important messages and staying on top of your tasks.
         </p>
+        <p>
+          Try AI Email Categorization today and experience the benefits of a
+          more organized inbox. With its user-friendly interface and powerful
+          features, you&apos;ll wonder how you ever managed without it.
+        </p>
+        <p>
+          Don&apos;t let your inbox overwhelm you. Take control of your email
+          management with AI Email Categorization. Sign up now and start
+          enjoying a more efficient and productive email experience.
+        </p>
       </div>
     </div>
   );
