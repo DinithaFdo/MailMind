@@ -28,6 +28,11 @@ const Reminder = () => {
         />
         <button type="submit">Add</button>
       </form>
+      <ul>
+        {reminders.map((reminder, index) => (
+          <li key={index}>{reminder}</li>
+        ))}
+      </ul>
     </div>
   );
 };
