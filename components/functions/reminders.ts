@@ -14,7 +14,7 @@ const Reminder = () => {
 
   return (
     <div>
-      <h1>ALL Reminder List</h1>
+      <h1>Reminder List</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
