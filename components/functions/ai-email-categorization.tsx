@@ -20,11 +20,11 @@ export default function AIEmailCategorization() {
           a way that makes sense for you.
         </p>
         <p>
-          Whether you're a busy professional, a student, or anyone who deals
-          with a large volume of emails, AI Email Categorization can help you
-          save time and reduce stress. By automating the categorization process,
-          you can focus on what really matters – responding to important
-          messages and staying on top of your tasks.
+          Whether you&apos;re a busy professional, a student, or anyone who
+          deals with a large volume of emails, AI Email Categorization can help
+          you save time and reduce stress. By automating the categorization
+          process, you can focus on what really matters – responding to
+          important messages and staying on top of your tasks.
         </p>
       </div>
     </div>
