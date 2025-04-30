@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import logo from "@/public/MailMind Logo.png";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -72,39 +73,39 @@ export default function Footer() {
 
                   <ul className="mt-6 space-y-4 text-sm">
                     <li>
-                      <a
+                      <Link
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
                         1on1 Coaching{" "}
-                      </a>
+                      </Link>
                     </li>
 
                     <li>
-                      <a
+                      <Link
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
                         Company Review{" "}
-                      </a>
+                      </Link>
                     </li>
 
                     <li>
-                      <a
+                      <Link
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
                         Accounts Review{" "}
-                      </a>
+                      </Link>
                     </li>
 
                     <li>
-                      <a
+                      <Link
                         href="#"
                         className="text-gray-700 transition hover:opacity-75">
                         {" "}
                         HR Consulting{" "}
-                      </a>
+                      </Link>
                     </li>
 
                     <li>
