@@ -44,8 +44,6 @@
 
 ## 🧑‍💻 Team & Roles
 
-## 🧑‍💻 Team & Roles
-
 | Team Member                  | GitHub Username                  | Feature                           | Branch Name                         |
 |-----------------------------|----------------------------------|-----------------------------------|-------------------------------------|
 | Gagana Ushan                | [@GaganaUshan](https://github.com/GaganaUshan)           | Email Categories Management       | `feature/email-categories`          |
@@ -110,14 +108,14 @@ npm start
 
 ### 6. 🧼 Useful Commands
 
-Command	Description
+| Command         | Description                                 |
+|-----------------|---------------------------------------------|
+| `npm run dev`   | Start the development server                |
+| `npm run build` | Build the app for production                |
+| `npm start`     | Start the production server                 |
+| `npm run lint`  | Run linter to find code issues              |
+| `npm run format`| Format code using Prettier (if configured)  |
 
-Command         | Description
-npm run dev     | Start the development server
-npm run build   | Build the app for production
-npm start       | Start the production server
-npm run lint    | Run linter to find code issues
-npm run format  | Format code using Prettier (if configured)
 
 
 
