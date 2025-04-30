@@ -44,8 +44,15 @@
 
 ## 🧑‍💻 Team & Roles
 
-- **Frontend Developer:** _[Friend’s Name]_
-- **Backend Developer (Email Summary System):** _[Dinitha](https://github.com/dinithadev)_
+## 🧑‍💻 Team & Roles
+
+| Team Member                  | GitHub Username                  | Feature                           | Branch Name                         |
+|-----------------------------|----------------------------------|-----------------------------------|-------------------------------------|
+| Gagana Ushan                | [@GaganaUshan](https://github.com/GaganaUshan)           | Email Categories Management       | `feature/email-categories`          |
+| Ishara Gunarathne           | [@ish-2000](https://github.com/ish-2000)                 | Email Reminder System             | `feature/email-reminders`           |
+| Dinitha Fernando            | [@DinithaFdo](https://github.com/DinithaFdo)             | Email Summarization History       | `feature/email-summarization`       |
+| Aweesha Thavishanka         | [@aweeshathavishanka](https://github.com/aweeshathavishanka) | AI Features                        | `feature/ai-tools`                  |
+
 
 ---
 
