@@ -56,7 +56,7 @@ export default function DashboardLayout({
                 <Tooltip>
                   <TooltipTrigger>
                     <Link
-                      href={"/dashboard/reminders"}
+                      href={"/summarization-history"}
                       className=" w-8 h-8 flex items-center justify-center border bg-gray-50 rounded-full p-0.5">
                       <HiOutlineDocumentText />
                     </Link>
