@@ -1,6 +1,7 @@
 import AddAccountSidebar from "@/components/shared/dashboard/reusable/AddAccountSidebar";
 import InboxSideBar from "@/components/shared/dashboard/reusable/InboxSideBar";
 import { ProfilePicture } from "@/components/shared/dashboard/reusable/ProfilePicture";
+import { HiOutlineDocumentText } from "react-icons/hi";
 import {
   Tooltip,
   TooltipContent,
@@ -37,20 +38,34 @@ export default function DashboardLayout({
           <div className=" col-span-4">
             <div className=" bg-white py-3 px-4 sticky top-0 z-50 border-b">
               <div className=" justify-end flex gap-3">
-                <TooltipProvider>
+                {/*<TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
                       <Link
                         href={"/dashboard/reminders"}
                         className=" w-8 h-8 flex items-center justify-center border bg-gray-50 rounded-full p-0.5">
-                        <IoMdNotificationsOutline />
+                        <HiOutlineDocumentText />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Notifications</p>
+                      <p>Summaries</p>
                     </TooltipContent>
                   </Tooltip>
-                </TooltipProvider>
+                </TooltipProvider>*/}
+                <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Link
+                      href={"/dashboard/reminders"}
+                      className=" w-8 h-8 flex items-center justify-center border bg-gray-50 rounded-full p-0.5">
+                      <HiOutlineDocumentText />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Summaries</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
