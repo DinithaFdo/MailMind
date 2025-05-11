@@ -1,5 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -214,7 +217,17 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     <div className="flex">
       {/* Left Sidebar: List of Summaries */}
       <div className="w-1/3 p-6 overflow-y-auto h-screen bg-gray-50">
-        <h2 className="text-2xl font-bold mb-6 text-gray-700">Summaries</h2>
+        {/* Return to Dashboard */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-700">Summaries</h2>
+          <Link
+            href="/dashboard/mail-chat"
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 hover:text-gray-800 transition"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Dashboard
+          </Link>
+        </div>
 
         {/* Search Bar */}
         <Input
@@ -251,20 +264,56 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
       <div className="flex-1 p-6 bg-white shadow-lg rounded-l-lg">
         {selectedSummary ? (
           <div className="flex flex-col items-start space-y-6">
+            {/* Title */}
             <h2 className="text-3xl font-semibold text-gray-900">
               {selectedSummary.name}
             </h2>
-            <p className="text-sm text-gray-500">
-              {new Date(selectedSummary.createdAt).toLocaleString()}
+
+            {/* Meta Info */}
+            <p className="text-sm text-gray-500 mb-6 border-b pb-2">
+              Created on: {new Date(selectedSummary.createdAt).toLocaleString()}
             </p>
-            <p className="mt-6 text-lg">{selectedSummary.summary}</p>
-            <div className="mt-6">
-              <p className="font-semibold text-gray-700">Tags:</p>
-              <div className="flex gap-3 flex-wrap">
+
+            {/* Body Content (email-style formatting with no hardcoded text) */}
+            <div className="prose prose-sm max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap">
+              {selectedSummary.summary}
+            </div>
+
+            {/* Copy Button */}
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(selectedSummary.summary);
+                  toast.success("Copied to clipboard!");
+                }}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-sm text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 16h8m-8-4h8m-8-4h8m-4 12a9 9 0 100-18 9 9 0 000 18z"
+                  />
+                </svg>
+                Copy Summary
+              </button>
+            </div>
+
+            {/* Tags Section */}
+            <div className="mt-8 border-t pt-4">
+              <p className="text-sm font-semibold text-gray-700 mb-2">Tags:</p>
+              <div className="flex flex-wrap gap-2">
                 {selectedSummary.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm font-medium"
+                    className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium"
                   >
                     {tag}
                   </span>
