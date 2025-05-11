@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -213,13 +216,78 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     );
   }
 
+  const handleDownloadReport = () => {
+  const doc = new jsPDF();
+  const currentDate = new Date().toLocaleString();
+
+  const logoUrl = "/MailMind Logo.png"; // Make sure this image exists in the public folder
+  const img = new Image();
+  img.src = logoUrl;
+
+  img.onload = () => {
+    // 🖼️ Logo (top right)
+    doc.addImage(img, "PNG", 150, 10, 40, 12);
+
+    // 📝 Title
+    doc.setFontSize(18);
+    doc.setTextColor(40);
+    doc.text("MailMind – Summary Report", 14, 20);
+
+    // 📅 Timestamp
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${currentDate}`, 14, 27);
+
+    // 📊 Table content
+    const tableColumn = ["Name", "Summary"];
+    const tableRows = filteredSummaries.map((summary) => [
+      summary.name,
+      summary.summary.length > 100
+        ? summary.summary.slice(0, 100) + "..."
+        : summary.summary,
+    ]);
+
+    autoTable(doc, {
+      startY: 32,
+      head: [tableColumn],
+      body: tableRows,
+      theme: "grid",
+      headStyles: {
+        fillColor: [63, 81, 181],
+        textColor: 255,
+        fontSize: 11,
+      },
+      bodyStyles: {
+        fontSize: 10,
+        cellPadding: 3,
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+      styles: {
+        halign: "left",
+        valign: "middle",
+      },
+    });
+
+    // Save the PDF
+    doc.save("summary-report.pdf");
+  };
+};
+
+
+
   return (
     <div className="flex">
       {/* Left Sidebar: List of Summaries */}
       <div className="w-1/3 p-6 overflow-y-auto h-screen bg-gray-50">
         {/* Return to Dashboard */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-700">Summaries</h2>
+          <div className="flex items-center justify-between mb-6">
+  <h2 className="text-2xl font-bold text-gray-700">Summaries</h2>
+  
+</div>
+
           <Link
             href="/dashboard/mail-chat"
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 hover:text-gray-800 transition"
@@ -373,9 +441,15 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
           </div>
         ) : (
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-gray-700">
+            <h2 className="text-2xl font-semibold text-gray-700 mt-10">
               Select a summary to view details
             </h2>
+            <Button
+    onClick={handleDownloadReport}
+    className="bg-indigo-600 text-white text-sm px-4 py-1.5 rounded-full shadow hover:bg-indigo-700 transition mt-10"
+  >
+    Download Summarization History
+  </Button>
           </div>
         )}
       </div>

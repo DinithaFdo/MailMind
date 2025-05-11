@@ -28,7 +28,7 @@ export const POST = async (req: NextRequest) => {
       priority,
       keywords,
       isCompleted: false,
-      clerkUserId: userId, // ✅ Save user ID
+      clerkUserId: userId,
     });
 
     return NextResponse.json(newReminder, { status: 201 });
