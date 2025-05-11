@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/db";
 import Summarization from "@/server/models/Summarization";
 
-// ✅ Handle PATCH request (Update a summary)
+
 export const PATCH = async (
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -54,7 +54,7 @@ export const PATCH = async (
   }
 };
 
-// ✅ Handle DELETE request (Delete a summary)
+
 export const DELETE = async (
   req: NextRequest,
   { params }: { params: { id: string } }

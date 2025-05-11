@@ -3,7 +3,6 @@ import { auth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/db";
 import Summarization from "@/server/models/Summarization";
 
-// ✅ Handle POST request (Create a new summary)
 export const POST = async (req: NextRequest) => {
   try {
     const { userId } = await auth();
@@ -45,7 +44,6 @@ export const POST = async (req: NextRequest) => {
   }
 };
 
-// ✅ Handle GET request (Fetch all summaries for the logged-in user)
 export const GET = async (req: NextRequest) => {
   try {
     const { userId } = await auth();
