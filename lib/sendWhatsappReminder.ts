@@ -9,7 +9,7 @@ interface WhatsAppMessageProps {
 export const sendWhatsappReminder = async ({
   phoneNumber,
   templateName,
-  variables
+  variables,
 }: WhatsAppMessageProps) => {
   try {
     const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
@@ -49,8 +49,13 @@ export const sendWhatsappReminder = async ({
     const response = await axios.post(url, payload, { headers });
     console.log("✅ WhatsApp sent:", response.data);
     return response.data;
-  } catch (err: any) {
-    console.error("❌ WhatsApp send error:", err?.response?.data || err.message);
+  } catch (err: unknown) {
+    const message = axios.isAxiosError(err)
+      ? err.response?.data || err.message
+      : err instanceof Error
+        ? err.message
+        : "Unknown error";
+    console.error("❌ WhatsApp send error:", message);
     return null;
   }
 };

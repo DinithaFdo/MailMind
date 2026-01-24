@@ -44,7 +44,7 @@ export default function MailText({ onSummaryGenerated }: MailTextProps) {
       } else {
         toast.error(data.error || "Failed to generate summary.");
       }
-    } catch (err) {
+    } catch {
       toast.error("Error communicating with AI summarizer.");
     } finally {
       setIsLoading(false);
@@ -57,7 +57,7 @@ export default function MailText({ onSummaryGenerated }: MailTextProps) {
       const clipboardText = await navigator.clipboard.readText();
       setEmailBody(clipboardText);
       toast.success("Pasted content successfully!");
-    } catch (err) {
+    } catch {
       toast.error("Failed to paste content.");
     }
   };
@@ -71,7 +71,7 @@ export default function MailText({ onSummaryGenerated }: MailTextProps) {
       } else {
         toast.error("No summary available to copy.");
       }
-    } catch (err) {
+    } catch {
       toast.error("Failed to copy summary.");
     }
   };

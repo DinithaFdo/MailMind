@@ -1,10 +1,16 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { toast } from "sonner";
 
 type Priority = "High" | "Medium" | "Low";
@@ -33,9 +39,11 @@ export default function EditReminderDialog({
   const [formData, setFormData] = useState(reminder);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
@@ -69,70 +77,74 @@ export default function EditReminderDialog({
         </DialogHeader>
 
         <div className="grid gap-3">
-        <div className="grid gap-3">
-  <Input
-    name="title"
-    value={formData.title}
-    onChange={handleChange}
-    placeholder="Title"
-  />
+          <div className="grid gap-3">
+            <Input
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Title"
+            />
 
-  <Textarea
-    name="description"
-    value={formData.description}
-    onChange={handleChange}
-    placeholder="Description"
-  />
+            <Textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Description"
+            />
 
-  <Input
-    name="date"
-    type="date"
-    value={formData.date}
-    onChange={handleChange}
-  />
+            <Input
+              name="date"
+              type="date"
+              value={formData.date}
+              onChange={handleChange}
+            />
 
-  <Input
-    name="time"
-    type="time"
-    value={formData.time}
-    onChange={handleChange}
-  />
+            <Input
+              name="time"
+              type="time"
+              value={formData.time}
+              onChange={handleChange}
+            />
 
-  {/* 🔽 Priority Dropdown */}
-  <div>
-    <label htmlFor="priority" className="text-sm font-medium text-gray-600 mb-1 block">
-      Priority
-    </label>
-    <select
-      id="priority"
-      name="priority"
-      value={formData.priority}
-      onChange={handleChange}
-      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    >
-      <option value="High">High</option>
-      <option value="Medium">Medium</option>
-      <option value="Low">Low</option>
-    </select>
-  </div>
+            {/* 🔽 Priority Dropdown */}
+            <div>
+              <label
+                htmlFor="priority"
+                className="text-sm font-medium text-gray-600 mb-1 block"
+              >
+                Priority
+              </label>
+              <select
+                id="priority"
+                name="priority"
+                value={formData.priority}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
 
-  <Input
-    name="keywords"
-    value={formData.keywords.join(", ")}
-    onChange={(e) =>
-      setFormData((prev) => ({
-        ...prev,
-        keywords: e.target.value.split(",").map((k) => k.trim()),
-      }))
-    }
-    placeholder="Comma separated keywords"
-  />
-</div>
-
+            <Input
+              name="keywords"
+              value={formData.keywords.join(", ")}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  keywords: e.target.value.split(",").map((k) => k.trim()),
+                }))
+              }
+              placeholder="Comma separated keywords"
+            />
+          </div>
         </div>
 
         <DialogFooter className="mt-4 flex justify-end gap-2">
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleSubmit} disabled={loading}>
             {loading ? "Saving..." : "Save Changes"}
           </Button>

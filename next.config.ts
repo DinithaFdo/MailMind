@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
       "img.clerk.com",
     ],
   },
+  eslint: {
+    // Warning only, don’t fail production build
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

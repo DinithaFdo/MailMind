@@ -12,7 +12,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { FaRegClock } from "react-icons/fa6";
-import { IoMdNotificationsOutline } from "react-icons/io";
 
 export const metadata: Metadata = {
   title: "MailMind – AI-Powered Email Management for Smarter Productivity",
