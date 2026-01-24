@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const prompt = `I'm going to send the below email. Summarize it in a way the recipient can understand better. Write the summary as if it's an email I'm about to send them (like a clear, professional note). Avoid bullet points. Output only the email-style summary. Here's the original email:\n\n${emailBody}`;
 
     const response = await ai.models.generateContentStream({
-      model: "gemini-2.5-flash-preview-04-17",
+      model: "gemini-2.0-flash",
       config: {
         responseMimeType: "text/plain",
       },
