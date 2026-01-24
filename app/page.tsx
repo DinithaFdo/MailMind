@@ -9,7 +9,7 @@ import Testimonials from "@/components/shared/Sections/Testimonials";
 
 export default function Home() {
   return (
-    <div>
+    <div suppressHydrationWarning>
       <div className=" sticky top-0 z-50">
         <NavBar />
       </div>

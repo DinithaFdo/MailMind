@@ -10,7 +10,7 @@ export default function NavBar() {
   const { isSignedIn } = useUser();
 
   return (
-    <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-50" suppressHydrationWarning>
       <div className="border-b bg-white/40 backdrop-blur-lg py-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
