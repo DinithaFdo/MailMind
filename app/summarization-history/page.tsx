@@ -31,8 +31,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Summaries() {
-  const [summaries, setSummaries] = useState<any[]>([]);
-  const [selectedSummary, setSelectedSummary] = useState<any>(null);
+  interface Summarization {
+    _id: string;
+    name: string;
+    summary: string;
+    tags?: string[];
+    createdAt?: string;
+  }
+
+  const [summaries, setSummaries] = useState<Summarization[]>([]);
+  const [selectedSummary, setSelectedSummary] = useState<Summarization | null>(
+    null,
+  );
   const [updatedSummary, setUpdatedSummary] = useState("");
   const [updatedName, setUpdatedName] = useState("");
   const [updatedTags, setUpdatedTags] = useState<string[]>([]);
@@ -76,8 +86,9 @@ export default function Summaries() {
       setSummaries(summaries.filter((summary) => summary._id !== id));
       setOpenDeleteDialog(false);
       setSelectedSummary(null);
-    } catch (error) {
-      console.error("Error deleting summary:", error);
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error deleting summary:", errorMsg);
       toast.error("Error deleting summary");
     } finally {
       setDeleting(false); // End deletion loading state
@@ -85,7 +96,7 @@ export default function Summaries() {
   };
 
   // ✅ Handle Edit Summary
-  const handleEdit = (summary: any) => {
+  const handleEdit = (summary: Summarization) => {
     setSelectedSummary(summary);
     setUpdatedSummary(summary.summary); // Prefill summary data
     setUpdatedName(summary.name); // Prefill name data
@@ -109,7 +120,7 @@ export default function Summaries() {
     const nameExists = summaries.some(
       (summary) =>
         summary.name.toLowerCase() === updatedName.toLowerCase() &&
-        summary._id !== selectedSummary._id
+        summary._id !== selectedSummary._id,
     );
     if (nameExists) {
       toast.error("Name must be unique.");
@@ -133,7 +144,7 @@ export default function Summaries() {
             summary: updatedSummary,
             tags: updatedTags,
           }),
-        }
+        },
       );
 
       if (!response.ok) throw new Error("Failed to update summary");
@@ -143,8 +154,8 @@ export default function Summaries() {
         summaries.map((summary) =>
           summary._id === selectedSummary._id
             ? updatedData.updatedSummary
-            : summary
-        )
+            : summary,
+        ),
       );
 
       toast.success("Summary updated successfully!");
@@ -170,32 +181,27 @@ export default function Summaries() {
   };
 
   // ✅ Handle adding tags when space is pressed
-const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  const inputField = e.target as HTMLInputElement;
-  const value = inputField.value.trim();
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const inputField = e.target as HTMLInputElement;
+    const value = inputField.value.trim();
 
-  // If space or enter is pressed
-  if (e.key === " " || e.key === "Enter") {
-    if (value !== "") {
-      // Split the value by space and filter out empty tags
-      const newTags = value.split(" ").filter((tag) => tag.trim() !== "");
+    // If space or enter is pressed
+    if (e.key === " " || e.key === "Enter") {
+      if (value !== "") {
+        // Split the value by space and filter out empty tags
+        const newTags = value.split(" ").filter((tag) => tag.trim() !== "");
 
-      // Avoid adding duplicate tags
-      const uniqueTags = Array.from(new Set([...updatedTags, ...newTags]));
+        // Avoid adding duplicate tags
+        const uniqueTags = Array.from(new Set([...updatedTags, ...newTags]));
 
-      // Update tags state with unique tags
-      setUpdatedTags(uniqueTags);
-      
+        // Update tags state with unique tags
+        setUpdatedTags(uniqueTags);
 
-      // Clear the input after adding the tag
-      inputField.value = "";
+        // Clear the input after adding the tag
+        inputField.value = "";
+      }
     }
-  }
-};
-
-
-
-
+  };
 
   // ✅ Filter Summaries by Search Term
   const filteredSummaries = summaries.filter(
@@ -203,8 +209,8 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
       summary.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       summary.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
       summary.tags.some((tag: string) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+        tag.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
   );
 
   // Show loading message or loader when fetching data
@@ -217,65 +223,63 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 
   const handleDownloadReport = () => {
-  const doc = new jsPDF();
-  const currentDate = new Date().toLocaleString();
+    const doc = new jsPDF();
+    const currentDate = new Date().toLocaleString();
 
-  const logoUrl = "/MailMind Logo.png"; // Make sure this image exists in the public folder
-  const img = new Image();
-  img.src = logoUrl;
+    const logoUrl = "/MailMind Logo.png"; // Make sure this image exists in the public folder
+    const img = new Image();
+    img.src = logoUrl;
 
-  img.onload = () => {
-    // 🖼️ Logo (top right)
-    doc.addImage(img, "PNG", 150, 10, 40, 12);
+    img.onload = () => {
+      // 🖼️ Logo (top right)
+      doc.addImage(img, "PNG", 150, 10, 40, 12);
 
-    // 📝 Title
-    doc.setFontSize(18);
-    doc.setTextColor(40);
-    doc.text("MailMind – Summary Report", 14, 20);
+      // 📝 Title
+      doc.setFontSize(18);
+      doc.setTextColor(40);
+      doc.text("MailMind – Summary Report", 14, 20);
 
-    // 📅 Timestamp
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Generated on: ${currentDate}`, 14, 27);
+      // 📅 Timestamp
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${currentDate}`, 14, 27);
 
-    // 📊 Table content
-    const tableColumn = ["Name", "Summary"];
-    const tableRows = filteredSummaries.map((summary) => [
-      summary.name,
-      summary.summary.length > 100
-        ? summary.summary.slice(0, 100) + "..."
-        : summary.summary,
-    ]);
+      // 📊 Table content
+      const tableColumn = ["Name", "Summary"];
+      const tableRows = filteredSummaries.map((summary) => [
+        summary.name,
+        summary.summary.length > 100
+          ? summary.summary.slice(0, 100) + "..."
+          : summary.summary,
+      ]);
 
-    autoTable(doc, {
-      startY: 32,
-      head: [tableColumn],
-      body: tableRows,
-      theme: "grid",
-      headStyles: {
-        fillColor: [63, 81, 181],
-        textColor: 255,
-        fontSize: 11,
-      },
-      bodyStyles: {
-        fontSize: 10,
-        cellPadding: 3,
-      },
-      alternateRowStyles: {
-        fillColor: [245, 245, 245],
-      },
-      styles: {
-        halign: "left",
-        valign: "middle",
-      },
-    });
+      autoTable(doc, {
+        startY: 32,
+        head: [tableColumn],
+        body: tableRows,
+        theme: "grid",
+        headStyles: {
+          fillColor: [63, 81, 181],
+          textColor: 255,
+          fontSize: 11,
+        },
+        bodyStyles: {
+          fontSize: 10,
+          cellPadding: 3,
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        styles: {
+          halign: "left",
+          valign: "middle",
+        },
+      });
 
-    // Save the PDF
-    doc.save("summary-report.pdf");
+      // Save the PDF
+      doc.save("summary-report.pdf");
+    };
   };
-};
-
-
 
   return (
     <div className="flex">
@@ -284,9 +288,8 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
         {/* Return to Dashboard */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center justify-between mb-6">
-  <h2 className="text-2xl font-bold text-gray-700">Summaries</h2>
-  
-</div>
+            <h2 className="text-2xl font-bold text-gray-700">Summaries</h2>
+          </div>
 
           <Link
             href="/dashboard/mail-chat"
@@ -445,11 +448,11 @@ const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
               Select a summary to view details
             </h2>
             <Button
-    onClick={handleDownloadReport}
-    className="bg-indigo-600 text-white text-sm px-4 py-1.5 rounded-full shadow hover:bg-indigo-700 transition mt-10"
-  >
-    Download Summarization History
-  </Button>
+              onClick={handleDownloadReport}
+              className="bg-indigo-600 text-white text-sm px-4 py-1.5 rounded-full shadow hover:bg-indigo-700 transition mt-10"
+            >
+              Download Summarization History
+            </Button>
           </div>
         )}
       </div>

@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     if (!emailBody) {
       return NextResponse.json(
         { error: "Email body is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -17,7 +17,6 @@ export async function POST(req: Request) {
     });
 
     const prompt = `I'm going to send the below email. Summarize it in a way the recipient can understand better. Write the summary as if it's an email I'm about to send them (like a clear, professional note). Avoid bullet points. Output only the email-style summary. Here's the original email:\n\n${emailBody}`;
-
 
     const response = await ai.models.generateContentStream({
       model: "gemini-2.5-flash-preview-04-17",
@@ -38,11 +37,13 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ summary });
-  } catch (error: any) {
-    console.error("Summarization error:", error);
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    console.error("Summarization error:", errorMessage);
     return NextResponse.json(
       { error: "Failed to summarize email. Please try again later." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

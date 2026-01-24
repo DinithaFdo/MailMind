@@ -15,7 +15,10 @@ export const POST = async (req: NextRequest) => {
     const { title, description, date, time, priority, keywords } = body;
 
     if (!title || !date || !time) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
     await connectDB();
@@ -39,7 +42,7 @@ export const POST = async (req: NextRequest) => {
 };
 
 // ✅ Fetch reminders only for logged-in user
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
   try {
     const { userId } = await auth(); // 👈 Clerk ID from session
     if (!userId) {
@@ -47,7 +50,9 @@ export const GET = async (req: NextRequest) => {
     }
 
     await connectDB();
-    const reminders = await Reminder.find({ clerkUserId: userId }).sort({ createdAt: -1 });
+    const reminders = await Reminder.find({ clerkUserId: userId }).sort({
+      createdAt: -1,
+    });
 
     return NextResponse.json(reminders);
   } catch (err) {

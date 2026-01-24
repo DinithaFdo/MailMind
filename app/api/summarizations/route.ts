@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest) => {
     if (!summary || summary.length < 10) {
       return NextResponse.json(
         { error: "Summary must be at least 10 characters." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -33,18 +33,18 @@ export const POST = async (req: NextRequest) => {
         message: "Summarization saved successfully",
         summarization: newSummarization,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (err) {
     console.error("Error saving summarization:", err);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
   try {
     const { userId } = await auth();
     if (!userId)
@@ -61,7 +61,7 @@ export const GET = async (req: NextRequest) => {
     console.error("Error fetching summaries:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };
