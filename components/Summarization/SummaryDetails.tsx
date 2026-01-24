@@ -1,7 +1,25 @@
 // SummaryDetails.tsx
 import { Button } from "@/components/ui/button";
 
-const SummaryDetails = ({ summary, onModifyClick, onDeleteClick }) => {
+interface SummarizationDetail {
+  _id: string;
+  name: string;
+  summary: string;
+  createdAt?: string;
+  tags?: string[];
+}
+
+interface SummaryDetailsProps {
+  summary: SummarizationDetail | null;
+  onModifyClick: () => void;
+  onDeleteClick: (id: string) => void;
+}
+
+const SummaryDetails = ({
+  summary,
+  onModifyClick,
+  onDeleteClick,
+}: SummaryDetailsProps) => {
   return (
     <div className="flex-1 p-6 bg-white shadow-lg rounded-l-lg">
       {summary ? (
@@ -10,13 +28,15 @@ const SummaryDetails = ({ summary, onModifyClick, onDeleteClick }) => {
             {summary.name}
           </h2>
           <p className="text-sm text-gray-500">
-            {new Date(summary.createdAt).toLocaleString()}
+            {summary.createdAt
+              ? new Date(summary.createdAt).toLocaleString()
+              : "Unknown"}
           </p>
           <p className="mt-6 text-lg">{summary.summary}</p>
           <div className="mt-6">
             <p className="font-semibold text-gray-700">Tags:</p>
             <div className="flex gap-3 flex-wrap">
-              {summary.tags.map((tag, index) => (
+              {(summary.tags ?? []).map((tag, index) => (
                 <span
                   key={index}
                   className="bg-blue-200 text-blue-800 py-1 px-3 rounded-full text-sm font-medium"

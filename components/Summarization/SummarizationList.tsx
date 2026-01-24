@@ -1,7 +1,24 @@
 // SummariesList.tsx
 import { Input } from "@/components/ui/input";
 
-const SummariesList = ({ summaries, onSelectSummary, onSearchChange }) => {
+interface SummarizationItem {
+  _id: string;
+  name: string;
+  summary: string;
+  tags?: string[];
+}
+
+interface SummariesListProps {
+  summaries: SummarizationItem[];
+  onSelectSummary: (summary: SummarizationItem) => void;
+  onSearchChange: (term: string) => void;
+}
+
+const SummariesList = ({
+  summaries,
+  onSelectSummary,
+  onSearchChange,
+}: SummariesListProps) => {
   return (
     <div className="w-1/3 p-6 overflow-y-auto h-screen bg-gray-50">
       <h2 className="text-2xl font-bold mb-6 text-gray-700">Summaries</h2>

@@ -74,9 +74,11 @@ export default function RemindersSection() {
             });
 
             const audio = new Audio("/reminder-sound.mp3");
-            audio.play().catch(() =>
-              console.log("Autoplay blocked, needs user interaction.")
-            );
+            audio
+              .play()
+              .catch(() =>
+                console.log("Autoplay blocked, needs user interaction."),
+              );
           }
 
           setNotified((prev) => [...prev, reminderId!]);
@@ -105,77 +107,82 @@ export default function RemindersSection() {
   const filteredReminders = reminders.filter((reminder) =>
     `${reminder.title} ${reminder.description} ${reminder.keywords.join(" ")}`
       .toLowerCase()
-      .includes(searchTerm.toLowerCase())
+      .includes(searchTerm.toLowerCase()),
   );
 
   const handleGenerateReport = () => {
-  const doc = new jsPDF();
-  const currentDate = new Date().toLocaleString();
+    const doc = new jsPDF();
+    const currentDate = new Date().toLocaleString();
 
-  // 🖼️ Add logo (local PNG in /public/logo.png)
-  const logoUrl = "/MailMind Logo.png"; 
-  const img = new Image();
-  img.src = logoUrl;
+    // 🖼️ Add logo (local PNG in /public/logo.png)
+    const logoUrl = "/MailMind Logo.png";
+    const img = new Image();
+    img.src = logoUrl;
 
-  img.onload = () => {
-    doc.addImage(img, "PNG", 150, 10, 40, 12); // Right top corner
+    img.onload = () => {
+      doc.addImage(img, "PNG", 150, 10, 40, 12); // Right top corner
 
-    // 🧾 Header Text
-    doc.setFontSize(20);
-    doc.setTextColor(40);
-    doc.text("MailMind – Reminders Report", 14, 20);
+      // 🧾 Header Text
+      doc.setFontSize(20);
+      doc.setTextColor(40);
+      doc.text("MailMind – Reminders Report", 14, 20);
 
-    // 📅 Generated Date
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Generated on: ${currentDate}`, 14, 27);
+      // 📅 Generated Date
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${currentDate}`, 14, 27);
 
-    // 📊 Table Data
-    const tableColumn = ["Title", "Description", "Date", "Time", "Priority", "Keywords"];
-    const tableRows: string[][] = [];
-
-    filteredReminders.forEach((reminder) => {
-      const reminderData = [
-        reminder.title,
-        reminder.description,
-        reminder.date,
-        reminder.time,
-        reminder.priority,
-        reminder.keywords.join(", "),
+      // 📊 Table Data
+      const tableColumn = [
+        "Title",
+        "Description",
+        "Date",
+        "Time",
+        "Priority",
+        "Keywords",
       ];
-      tableRows.push(reminderData);
-    });
+      const tableRows: string[][] = [];
 
-    // 📐 Table Styling
-    autoTable(doc, {
-      startY: 32,
-      head: [tableColumn],
-      body: tableRows,
-      theme: "grid",
-      headStyles: {
-        fillColor: [63, 81, 181], // Indigo
-        textColor: 255,
-        fontSize: 11,
-      },
-      bodyStyles: {
-        fontSize: 10,
-        cellPadding: 3,
-      },
-      alternateRowStyles: {
-        fillColor: [245, 245, 245],
-      },
-      styles: {
-        halign: "left",
-        valign: "middle",
-      },
-      margin: { top: 10, bottom: 20 },
-    });
+      filteredReminders.forEach((reminder) => {
+        const reminderData = [
+          reminder.title,
+          reminder.description,
+          reminder.date,
+          reminder.time,
+          reminder.priority,
+          reminder.keywords.join(", "),
+        ];
+        tableRows.push(reminderData);
+      });
 
-    doc.save("reminders-report.pdf");
+      // 📐 Table Styling
+      autoTable(doc, {
+        startY: 32,
+        head: [tableColumn],
+        body: tableRows,
+        theme: "grid",
+        headStyles: {
+          fillColor: [63, 81, 181], // Indigo
+          textColor: 255,
+          fontSize: 11,
+        },
+        bodyStyles: {
+          fontSize: 10,
+          cellPadding: 3,
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        styles: {
+          halign: "left",
+          valign: "middle",
+        },
+        margin: { top: 10, bottom: 20 },
+      });
+
+      doc.save("reminders-report.pdf");
+    };
   };
-};
-
-
 
   if (loading) return <p className="p-10">Loading reminders...</p>;
   if (error) return <p className="p-10 text-red-600">Error: {error}</p>;
@@ -191,7 +198,8 @@ export default function RemindersSection() {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -220,21 +228,27 @@ export default function RemindersSection() {
       {/* 💬 Reminder Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {filteredReminders.length > 0 ? (
-          filteredReminders.map((reminder) => (
-            <ReminderCard
-              key={reminder._id || reminder.id}
-              id={reminder._id || reminder.id}
-              title={reminder.title}
-              description={reminder.description}
-              date={reminder.date}
-              time={reminder.time}
-              priority={reminder.priority}
-              keywords={reminder.keywords}
-              onDeleteSuccess={fetchReminders}
-            />
-          ))
+          filteredReminders.map((reminder) => {
+            const rid = reminder._id ?? reminder.id;
+            if (!rid) return null;
+            return (
+              <ReminderCard
+                key={rid}
+                id={rid}
+                title={reminder.title}
+                description={reminder.description}
+                date={reminder.date}
+                time={reminder.time}
+                priority={reminder.priority}
+                keywords={reminder.keywords}
+                onDeleteSuccess={fetchReminders}
+              />
+            );
+          })
         ) : (
-          <p className="text-gray-500 col-span-full">No reminders match your search.</p>
+          <p className="text-gray-500 col-span-full">
+            No reminders match your search.
+          </p>
         )}
       </div>
     </div>

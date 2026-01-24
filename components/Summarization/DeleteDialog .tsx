@@ -10,9 +10,19 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"; // Make sure to import these from the correct path
 
-const DeleteSummaryDialog = ({ open, onClose, onDelete }) => {
+interface DeleteSummaryDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+}
+
+const DeleteSummaryDialog = ({
+  open,
+  onClose,
+  onDelete,
+}: DeleteSummaryDialogProps) => {
   return (
-    <AlertDialog open={open} onOpenChange={onClose}>
+    <AlertDialog open={open} onOpenChange={() => onClose()}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

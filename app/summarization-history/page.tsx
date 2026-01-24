@@ -106,6 +106,11 @@ export default function Summaries() {
 
   // ✅ Handle Update Summary
   const handleUpdate = async () => {
+    if (!selectedSummary) {
+      toast.error("No summary selected.");
+      return;
+    }
+
     if (!updatedName || updatedName.length > 50) {
       toast.error("Name is required and should be less than 50 characters.");
       return;
@@ -208,9 +213,10 @@ export default function Summaries() {
     (summary) =>
       summary.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       summary.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      summary.tags.some((tag: string) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase()),
-      ),
+      (summary.tags &&
+        summary.tags.some((tag: string) =>
+          tag.toLowerCase().includes(searchTerm.toLowerCase()),
+        )),
   );
 
   // Show loading message or loader when fetching data
@@ -342,7 +348,10 @@ export default function Summaries() {
 
             {/* Meta Info */}
             <p className="text-sm text-gray-500 mb-6 border-b pb-2">
-              Created on: {new Date(selectedSummary.createdAt).toLocaleString()}
+              Created on:{" "}
+              {selectedSummary.createdAt
+                ? new Date(selectedSummary.createdAt).toLocaleString()
+                : "Unknown"}
             </p>
 
             {/* Body Content (email-style formatting with no hardcoded text) */}
@@ -381,14 +390,20 @@ export default function Summaries() {
             <div className="mt-8 border-t pt-4">
               <p className="text-sm font-semibold text-gray-700 mb-2">Tags:</p>
               <div className="flex flex-wrap gap-2">
-                {selectedSummary.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium"
-                  >
-                    {tag}
+                {selectedSummary.tags && selectedSummary.tags.length > 0 ? (
+                  selectedSummary.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-gray-500 text-sm">
+                    No tags available
                   </span>
-                ))}
+                )}
               </div>
             </div>
 

@@ -3,10 +3,14 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import UserDetails from "@/server/models/UserDetails";
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     await connectDB();
-    const existing = await UserDetails.findOne({ clerkUserId: params.id });
+    const { id } = await params;
+    const existing = await UserDetails.findOne({ clerkUserId: id });
 
     if (!existing) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });

@@ -5,14 +5,15 @@ import Blog from "@/server/models/Blog";
 // GET - Fetch a single blog post by ID
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Connect to database
     await connectDB();
 
+    const { id } = await params;
     // Find the blog by ID
-    const blog = await Blog.findById(params.id);
+    const blog = await Blog.findById(id);
 
     // If blog not found, return 404
     if (!blog) {
@@ -31,12 +32,13 @@ export async function GET(
 // PUT - Update a blog post by ID
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Connect to database
     await connectDB();
 
+    const { id } = await params;
     // Get the data sent with the PUT request
     const data = await req.json();
 
@@ -44,12 +46,12 @@ export async function PUT(
     if (!data.title || !data.content) {
       return NextResponse.json(
         { error: "Missing required fields (title, content)" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Find and update the blog by ID
-    const updatedBlog = await Blog.findByIdAndUpdate(params.id, data, {
+    const updatedBlog = await Blog.findByIdAndUpdate(id, data, {
       new: true, // Return the updated document
     });
 
@@ -70,14 +72,15 @@ export async function PUT(
 // DELETE - Delete a blog post by ID
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     // Connect to database
     await connectDB();
 
+    const { id } = await params;
     // Delete the blog by ID
-    const deletedBlog = await Blog.findByIdAndDelete(params.id);
+    const deletedBlog = await Blog.findByIdAndDelete(id);
 
     // If no blog found, return 404
     if (!deletedBlog) {
@@ -87,7 +90,7 @@ export async function DELETE(
     // Return success message
     return NextResponse.json(
       { message: "Blog deleted successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     // Log error and return 500

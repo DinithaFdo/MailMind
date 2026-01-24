@@ -3,11 +3,10 @@ import { auth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/db";
 import Summarization from "@/server/models/Summarization";
 
-
-export const PATCH = async (
+export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const { userId } = await auth();
     if (!userId)
@@ -15,11 +14,12 @@ export const PATCH = async (
 
     await connectDB();
 
+    const { id } = await params;
     const { summary, name, tags } = await req.json(); // Ensure tags are included
     if (!summary || summary.length < 10) {
       return NextResponse.json(
         { error: "Summary must be at least 10 characters." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -32,9 +32,9 @@ export const PATCH = async (
     const finalTags = validatedTags.slice(0, 5);
 
     const updatedSummary = await Summarization.findOneAndUpdate(
-      { _id: params.id, userId }, // Ensures user can only update their own summary
+      { _id: id, userId }, // Ensures user can only update their own summary
       { summary, name, tags: finalTags }, // Save tags here
-      { new: true }
+      { new: true },
     );
 
     if (!updatedSummary) {
@@ -43,22 +43,21 @@ export const PATCH = async (
 
     return NextResponse.json(
       { message: "Summary updated successfully", updatedSummary },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error updating summary:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
-};
+}
 
-
-export const DELETE = async (
+export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const { userId } = await auth();
     if (!userId)
@@ -66,8 +65,9 @@ export const DELETE = async (
 
     await connectDB();
 
+    const { id } = await params;
     const deletedSummary = await Summarization.findOneAndDelete({
-      _id: params.id,
+      _id: id,
       userId,
     });
 
@@ -77,13 +77,13 @@ export const DELETE = async (
 
     return NextResponse.json(
       { message: "Summary deleted successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error deleting summary:", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
-};
+}

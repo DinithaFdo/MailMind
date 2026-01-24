@@ -8,12 +8,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-const ModifySummaryModal = ({ open, onClose, onSave, summary }) => {
+interface Summarization {
+  _id: string;
+  name: string;
+  summary: string;
+  tags?: string[];
+}
+
+interface ModifySummaryModalProps {
+  open: boolean;
+  onClose: () => void;
+  onSave: (summary: Summarization) => void;
+  summary: Summarization | null;
+}
+
+const ModifySummaryModal = ({
+  open,
+  onClose,
+  onSave,
+  summary,
+}: ModifySummaryModalProps) => {
   if (!summary) {
     return null; // Don't render the modal if summary is null
   }
 
-  const handleSave = (e) => {
+  const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Assuming onSave is a function that updates the summary data
 
@@ -29,12 +48,12 @@ const ModifySummaryModal = ({ open, onClose, onSave, summary }) => {
     onClose();
   };
 
-  const handleTagsChange = (e) => {
+  const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     summary.tags = e.target.value.split(",").map((tag) => tag.trim());
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={() => onClose()}>
       <DialogContent className="max-w-2xl p-8 rounded-lg bg-white shadow-xl">
         <DialogHeader>
           <DialogTitle>Edit Summary</DialogTitle>
@@ -105,7 +124,11 @@ const ModifySummaryModal = ({ open, onClose, onSave, summary }) => {
             <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" variant="primary">
+            <Button
+              type="submit"
+              variant="default"
+              className="bg-indigo-600 text-white hover:bg-indigo-700"
+            >
               Save Changes
             </Button>
           </div>
