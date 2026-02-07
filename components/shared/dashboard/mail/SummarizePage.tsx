@@ -12,7 +12,7 @@ export default function SummarizePage() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 grid w-full gap-2">
       <h1 className="text-xl font-semibold mb-4">Summarize Your Email</h1>
 
       <MailText onSummaryGenerated={handleSummaryGenerated} />

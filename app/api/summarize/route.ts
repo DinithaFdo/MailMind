@@ -16,10 +16,21 @@ export async function POST(req: Request) {
       apiKey: process.env.GEMINI_API_KEY,
     });
 
-    const prompt = `I'm going to send the below email. Summarize it in a way the recipient can understand better. Write the summary as if it's an email I'm about to send them (like a clear, professional note). Avoid bullet points. Output only the email-style summary. Here's the original email:\n\n${emailBody}`;
+    // UPDATED PROMPT: More robust instructions for a natural email flow
+    const prompt = `You are an expert communication assistant. Rewrite the following email draft to be concise, clear, and professional. 
+    
+    Rules:
+    1. Keep all critical information (dates, names, action items).
+    2. Remove fluff and redundancy.
+    3. The output must be ready-to-send text (no intro like "Here is a summary").
+    4. Do not use bullet points; use fluid paragraphs.
+    5. Maintain the original sender's voice but make it more polished.
+
+    Original Email:
+    ${emailBody}`;
 
     const response = await ai.models.generateContentStream({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash", // UPDATED: Changed to the available 2.5 Flash model
       config: {
         responseMimeType: "text/plain",
       },
