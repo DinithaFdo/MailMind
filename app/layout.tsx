@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import Preloader from "@/components/shared/Preloader";
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
           suppressHydrationWarning
         >
+          <Preloader />
           {children}
           <Toaster />
         </body>

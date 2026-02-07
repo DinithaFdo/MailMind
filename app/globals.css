@@ -44,6 +44,17 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@layer utilities {
+  @keyframes progress {
+    0% {
+      transform: scaleX(0);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
