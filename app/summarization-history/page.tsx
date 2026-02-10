@@ -53,7 +53,7 @@ export default function Summaries() {
   const [openModifyModal, setOpenModifyModal] = useState(false);
   const [deleting, setDeleting] = useState(false); // Track if deletion is in progress
 
-  // ✅ Fetch Summaries with loading state
+  // Fetch Summaries with loading state
   useEffect(() => {
     const fetchSummaries = async () => {
       setLoading(true); // Show loader before fetching
@@ -73,7 +73,7 @@ export default function Summaries() {
     fetchSummaries();
   }, []);
 
-  // ✅ Handle Delete Summary
+  // Handle Delete Summary
   const handleDelete = async (id: string) => {
     setDeleting(true); // Start deletion loading state
     try {
@@ -95,7 +95,7 @@ export default function Summaries() {
     }
   };
 
-  // ✅ Handle Edit Summary
+  // Handle Edit Summary
   const handleEdit = (summary: Summarization) => {
     setSelectedSummary(summary);
     setUpdatedSummary(summary.summary); // Prefill summary data
@@ -104,7 +104,7 @@ export default function Summaries() {
     setOpenModifyModal(true); // Open the Modify modal when edit is clicked
   };
 
-  // ✅ Handle Update Summary
+  // Handle Update Summary
   const handleUpdate = async () => {
     if (!selectedSummary) {
       toast.error("No summary selected.");
@@ -172,7 +172,7 @@ export default function Summaries() {
     }
   };
 
-  // ✅ Handle Tag Input (Press space to add a tag)
+  // Handle Tag Input (Press space to add a tag)
   const handleTagInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const newTags = value.split(" ").filter((tag) => tag.trim() !== "");
@@ -185,7 +185,7 @@ export default function Summaries() {
     }
   };
 
-  // ✅ Handle adding tags when space is pressed
+  // Handle adding tags when space is pressed
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const inputField = e.target as HTMLInputElement;
     const value = inputField.value.trim();
@@ -208,7 +208,7 @@ export default function Summaries() {
     }
   };
 
-  // ✅ Filter Summaries by Search Term
+  // Filter Summaries by Search Term
   const filteredSummaries = summaries.filter(
     (summary) =>
       summary.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -237,20 +237,20 @@ export default function Summaries() {
     img.src = logoUrl;
 
     img.onload = () => {
-      // 🖼️ Logo (top right)
+      // Logo (top right)
       doc.addImage(img, "PNG", 150, 10, 40, 12);
 
-      // 📝 Title
+      // Title
       doc.setFontSize(18);
       doc.setTextColor(40);
       doc.text("MailMind – Summary Report", 14, 20);
 
-      // 📅 Timestamp
+      // Timestamp
       doc.setFontSize(10);
       doc.setTextColor(100);
       doc.text(`Generated on: ${currentDate}`, 14, 27);
 
-      // 📊 Table content
+      // Table content
       const tableColumn = ["Name", "Summary"];
       const tableRows = filteredSummaries.map((summary) => [
         summary.name,

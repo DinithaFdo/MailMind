@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       apiKey: process.env.GEMINI_API_KEY,
     });
 
-    // UPDATED PROMPT: More robust instructions for a natural email flow
+   
     const prompt = `You are an expert communication assistant. Rewrite the following email draft to be concise, clear, and professional. 
     
     Rules:
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     ${emailBody}`;
 
     const response = await ai.models.generateContentStream({
-      model: "gemini-2.5-flash", // UPDATED: Changed to the available 2.5 Flash model
+      model: "gemini-2.5-flash", 
       config: {
         responseMimeType: "text/plain",
       },

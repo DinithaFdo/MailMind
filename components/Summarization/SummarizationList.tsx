@@ -1,4 +1,3 @@
-// SummariesList.tsx
 import { Input } from "@/components/ui/input";
 
 interface SummarizationItem {
